@@ -12,6 +12,25 @@ var appName = "";
 var url = "";
 
 $(function(){
+	/*
+    setInterval(function(){
+        var newUrl = window.location.href;
+        console.log("newUrl:" + newUrl);
+        var newUrlArray = newUrl.split("/");
+        for (var i = 0;i < newUrlArray.length; i++) {
+            if( groupName == newUrlArray[3] && appName == newUrlArray[4]) {
+                console.log("项目没有改变");
+            } else {
+                console.log("项目已改变");
+                groupName = newUrlArray[3];
+                appName = newUrlArray[4];
+                if (initAppInfo()){
+                    getBetaBranchName();
+                }
+            }
+        }
+    },1000);
+    */
 
     if (!initAppInfo()) {
     	return;

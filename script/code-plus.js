@@ -10,7 +10,8 @@ var host = "";
 var groupName;
 var appName;
 
-$(function(){
+$(function(){ 
+
 	console.log('------begin------');
 	console.log(jQuery);
 
@@ -63,7 +64,7 @@ function backMessage() {
         //console.log($(doc));
         $.each( doc, function( i, el ) {
 	    	//nodeNames[i] = "<li>" + el.nodeName + "</li>";
-	    	console.log(i + "---" +el.nodeName);
+	    	//console.log(i + "---" +el.nodeName);
 	    	if (i == 23) {
 	    		//console.log($(el));
 	    		//console.log($(el).children()[0].children[0].children[0].children[0].children[1].children[0].children.length);
@@ -73,6 +74,10 @@ function backMessage() {
 	    			var branchName = branch.value;
 	    			//console.log(branch + "--" + branch.text);
 	    			if (branch.text.indexOf("[beta]") > 0) {
+	    				//分隔符
+	    				var spanLabel = document.createElement("span");
+						spanLabel.setAttribute("class", "separator");
+						window.document.getElementsByClassName("ci")[0].appendChild(spanLabel);
 	    				console.log("beta分支名称：" + branchName);
 	    				betaBranchName = branchName;
 	    				betaBranchUrl = "http://" + host + "/" + groupName + "/" + appName + "/ci_branch/" + betaBranchName;
@@ -83,6 +88,29 @@ function backMessage() {
 	    		}
 	    	} 
 	    });
+		var title = $('title');//the element I want to monitor 
+		title.bind('DOMNodeInserted', function(e) { 
+			setTimeout(function () { 
+				//分隔符
+				var spanLabel = document.createElement("span");
+				spanLabel.setAttribute("class", "separator");
+				window.document.getElementsByClassName("ci")[0].appendChild(spanLabel);
+
+		        console.log(betaBranchUrl);
+				console.log(document.getElementsByClassName("ci")[0]);
+
+				//beta分支链接
+				var h1Label = document.createElement("h1");
+				h1Label.setAttribute("class", "project_name");
+				h1Label.innerHTML = "Beta";
+				var aLabel = document.createElement("a");
+				aLabel.href = betaBranchUrl;
+				aLabel.appendChild(h1Label);
+				console.log(aLabel);
+				window.document.getElementsByClassName("ci")[0].appendChild(aLabel);
+		    }, 1000);
+			
+		});
     }
 }
 

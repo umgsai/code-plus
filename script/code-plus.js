@@ -89,6 +89,7 @@ function getBetaBranchName() {
                         if (branch.text.indexOf("[beta]") > 0) {
                             betaBranchName = branch.value;
                             updatePage();
+                            break;
                         }
                     }
                 }

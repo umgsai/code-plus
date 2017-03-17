@@ -1,5 +1,5 @@
 {
-  "name": "code-plus",
+  "name": "Dianping Code Plus",
   "version": "0.0.1",
   "manifest_version": 2,
   "description": "针对点评Code平台的插件",
@@ -24,7 +24,10 @@
     }
   ],
   "permissions": [
-    "http://*/*",
-        "https://*/*"   
+    "https://*/*",
+    "tabs",
+    "http://*/",
+    "activeTab",
+    "webRequest","storage"
   ]
 }

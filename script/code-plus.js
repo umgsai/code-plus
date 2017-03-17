@@ -12,25 +12,30 @@ var appName = "";
 var url = "";
 
 $(function(){
-	/*
-    setInterval(function(){
+    var title = $('head');//the element I want to monitor
+    title.bind('DOMNodeInserted', function(e) {
         var newUrl = window.location.href;
         console.log("newUrl:" + newUrl);
         var newUrlArray = newUrl.split("/");
-        for (var i = 0;i < newUrlArray.length; i++) {
-            if( groupName == newUrlArray[3] && appName == newUrlArray[4]) {
-                console.log("项目没有改变");
-            } else {
-                console.log("项目已改变");
-                groupName = newUrlArray[3];
-                appName = newUrlArray[4];
-                if (initAppInfo()){
-                    getBetaBranchName();
-                }
+
+        if( groupName == newUrlArray[3] && appName == newUrlArray[4]) {
+            console.log("项目没有改变");
+        } else {
+            console.log("项目已改变");
+            groupName = newUrlArray[3];
+            appName = newUrlArray[4];
+            if (initAppInfo()){
+                getBetaBranchName();
             }
         }
-    },1000);
-    */
+
+        //groupName = newUrlArray[3];
+        //appName = newUrlArray[4];
+        setTimeout(function () {
+            updatePage();
+        }, 1000);
+
+    });
 
     if (!initAppInfo()) {
     	return;
@@ -38,37 +43,17 @@ $(function(){
 
     getBetaBranchName();
 
-    var title = $('head');//the element I want to monitor
-    title.bind('DOMNodeInserted', function(e) {
-        var newUrl = window.location.href;
-        console.log("newUrl:" + newUrl);
-        var newUrlArray = newUrl.split("/");
-        for (var i = 0;i < newUrlArray.length; i++) {
-            if( groupName == newUrlArray[3] && appName == newUrlArray[4]) {
-            	console.log("项目没有改变");
-			} else {
-            	console.log("项目已改变");
-                groupName = newUrlArray[3];
-                appName = newUrlArray[4];
-                if (initAppInfo()){
-                    getBetaBranchName();
-				}
-			}
-        }
 
-        groupName = newUrlArray[3];
-        appName = newUrlArray[4];
-        setTimeout(function () {
-        	updatePage();
-        }, 1000);
-
-    });
 })
 
 function updatePage() {
 	if (betaBranchName.length <= 0) {
 		return;
 	}
+	if (window.document.getElementsByClassName("ci")[0].children.length > 1) {
+	    console.log("已添加beta分支链接");
+	    return;
+    }
     //分隔符
     var spanLabel = document.createElement("span");
     spanLabel.setAttribute("class", "separator");
@@ -93,7 +78,7 @@ function getBetaBranchName() {
 		dataType: "html",
         success: function (data) {
             var doc = $.parseHTML(data);
-            console.log(doc);
+            //console.log(doc);
             $.each(doc, function(i, el) {
                 if (i == 23) {
                     var branchNum = $(el).children()[0].children[0].children[0].children[0].children[1].children[0].children.length;
@@ -134,9 +119,11 @@ function initAppInfo() {
         appName = ""
 		return false;
 	}
+	/*
     for (var i = 0;i < urlArray.length; i++) {
     	console.log(i + "-" + urlArray[i]);
 	}
+	*/
 
     groupName = urlArray[3];
     appName = urlArray[4];

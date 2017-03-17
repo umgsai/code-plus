@@ -86,6 +86,7 @@ function getBetaBranchName() {
                     for (var i = branchNum - 1; i >= 0; i--) {
                         var branch = $(el).children()[0].children[0].children[0].children[0].children[1].children[0].children[i];
                         //console.log(branch + "--" + branch.text);
+                        //获取beta分支名字
                         if (branch.text.indexOf("[beta]") > 0) {
                             betaBranchName = branch.value;
                             updatePage();

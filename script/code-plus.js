@@ -43,8 +43,6 @@ $(function(){
 	}
 
     getBetaBranchName();
-
-
 })
 
 function updatePage() {

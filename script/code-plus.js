@@ -12,7 +12,7 @@ var appName = "";
 var url = "";
 
 $(function(){
-    var title = $('head');//the element I want to monitor
+    var title = $('head');
     title.bind('DOMNodeInserted', function(e) {
         var newUrl = window.location.href;
         console.log("newUrl:" + newUrl);
@@ -31,9 +31,10 @@ $(function(){
 
         //groupName = newUrlArray[3];
         //appName = newUrlArray[4];
+        //等待新页面渲染完成
         setTimeout(function () {
             updatePage();
-        }, 1000);
+        }, 500);
 
     });
 

@@ -12,6 +12,12 @@ var appName = "";
 var url = "";
 
 $(function(){
+    host = window.location.host;
+    if (host != "code.dianpingoa.com") {
+        console.log("code-plus插件只在code.dianpingoa.com域名下有效");
+        return false;
+    }
+
     var title = $('head');
     title.bind('DOMNodeInserted', function(e) {
         var newUrl = window.location.href;
@@ -36,6 +42,12 @@ $(function(){
             updatePage();
         }, 500);
 
+        if (newUrl == betaBranchUrl) {
+            console.log("已切换到beta分支..");
+            var tbody = $(".module-machine-list")[0].children[1];
+            var modules = tbody.children;
+            console.log("模块数量：" + modules.length);
+        }
     });
 
     if (!initAppInfo()) {

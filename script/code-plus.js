@@ -143,8 +143,12 @@ function getBetaBranchName() {
                         //console.log(branch + "--" + branch.text);
                         //获取beta分支名字
                         if (branch.text.indexOf("[beta]") > 0) {
+                            //当前页面即为beta分支页面
                             betaBranchName = branch.value;
+                            //顶部添加beta分支链接
                             updatePage();
+                            //添加跳转到service&web&mq页面的链接
+                            updateBetaPage();
                             break;
                         }
                     }

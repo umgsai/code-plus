@@ -60,9 +60,68 @@ $(function(){
 	}
 
     getBetaBranchName();
+
+    var urlArray = url.split("/");
+    for (var i = urlArray.length - 1; i >= 0; i--) {
+        console.log(urlArray[i]);
+    }
+    if (urlArray.length == 7 && urlArray[5] == "tickets") {
+        console.log("发布");
+    }
+    var ticketPackingItem = $(".ticket-packing-item");
+    ticketPackingItem.bind('DOMNodeInserted', function(e){
+        console.log("ticketPackingItem刷新");
+        if (ticketPackingItem[0].children.length > 2) {
+            var legendItem = ticketPackingItem[0].children[1];
+            var legendItemText = legendItem.innerHTML;//分组操作(bb-merchant-finance-app-web | HealthCheckUrl:/index.jsp)
+            var appName = legendItemText.split("(")[1].split("|")[0].replace(" ", "");
+            console.log(appName);
+            var tableItem = $(".grouping-rollouts-list")[0].children[2].children;
+            if (appName.endWith("-web")) {
+                //var tableItem = $(".grouping-rollouts-list")[0].children[2].children;
+                for (var i = tableItem.length - 1; i >= 0; i--) {
+                    var dataContent = tableItem[i].children[0].children[0].getAttribute("data-content");
+                    console.log(dataContent);
+                    var webIp = dataContent.split("\"")[3];
+                    var webAddress = "http://" + webIp + ":8080/";
+                    tableItem[i].children[0].setAttribute("address", webAddress);
+                    $(tableItem[i].children[0]).unbind();
+                    $(tableItem[i].children[0]).click(function(){
+                        //window.open($(this).attr("address"));
+                        console.log($(this).attr("address"));
+                    });
+                    if (tableItem[i].children[0].children.length == 1) {
+                        $(tableItem[i].children[0]).append($("<a href='"+ webAddress +"' target='_blank'>View</a>"));
+                    }
+                }
+            } else if (appName.endWith("-service")) {
+                for (var i = tableItem.length - 1; i >= 0; i--) {
+                    var dataContent = tableItem[i].children[0].children[0].getAttribute("data-content");
+                    console.log(dataContent);
+                    var serviceIp = dataContent.split("\"")[3];
+                    var serviceAddress = "http://" + serviceIp + ":4080/services";
+                    tableItem[i].children[0].setAttribute("address", serviceAddress);
+                    $(tableItem[i].children[0]).unbind();
+                    $(tableItem[i].children[0]).click(function(){
+                        //window.open($(this).attr("address"));
+                        console.log($(this).attr("address"));
+                    });
+                    if (tableItem[i].children[0].children.length == 1) {
+                        $(tableItem[i].children[0]).append($("<a href='"+ serviceAddress +"' target='_blank'>View</a>"));
+                    }
+                }
+            }
+        }
+    });
 })
 
 function updateBetaPage() {
+    console.log(betaBranchUrl);
+    console.log(url);
+    if (url != betaBranchUrl) {
+        console.log("当前页面不是beta分支页面..");
+        return;
+    }
     console.log("已切换到beta分支..");
     console.log($(".module-machine-list")[0].children[1].children.length);
     var tbody = $(".module-machine-list")[0].children[1].children;

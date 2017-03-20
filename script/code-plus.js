@@ -53,6 +53,17 @@ $(function(){
                 updateBetaPage();
             }
         }, 500);
+
+        if (newUrlArray.length == 7 && newUrlArray[5] == "tickets") {
+            console.log("发布页面");
+            setTimeout(function () {
+                //给发布页面添加链接
+                updatePublishPage();
+            }, 550);
+        } else {
+            console.log("非发布页面");
+            return;
+        }
     });
 
     if (!initAppInfo()) {
@@ -62,17 +73,12 @@ $(function(){
     getBetaBranchName();
 
     var urlArray = url.split("/");
-    /*
-    for (var i = urlArray.length - 1; i >= 0; i--) {
-        console.log(urlArray[i]);
-    }
-    */
     if (urlArray.length == 7 && urlArray[5] == "tickets") {
-        console.log("发布页面");
-    } else {
-        console.log("非发布页面");
-        return;
+        updatePublishPage();
     }
+})
+
+function updatePublishPage() {
     //给发布页面添加View链接
     var ticketPackingItem = $(".ticket-packing-item");
     //每次刷新会出发多次DOMNodeInserted事件，暂未解决
@@ -100,7 +106,7 @@ $(function(){
             }
         }
     });
-})
+}
 
 function updateBetaPage() {
     console.log(betaBranchUrl);

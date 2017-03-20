@@ -77,38 +77,18 @@ $(function(){
             var appName = legendItemText.split("(")[1].split("|")[0].replace(" ", "");
             console.log(appName);
             var tableItem = $(".grouping-rollouts-list")[0].children[2].children;
-            if (appName.endWith("-web")) {
-                //var tableItem = $(".grouping-rollouts-list")[0].children[2].children;
-                for (var i = tableItem.length - 1; i >= 0; i--) {
-                    var dataContent = tableItem[i].children[0].children[0].getAttribute("data-content");
-                    console.log(dataContent);
-                    var webIp = dataContent.split("\"")[3];
-                    var webAddress = "http://" + webIp + ":8080/";
-                    tableItem[i].children[0].setAttribute("address", webAddress);
-                    $(tableItem[i].children[0]).unbind();
-                    $(tableItem[i].children[0]).click(function(){
-                        //window.open($(this).attr("address"));
-                        console.log($(this).attr("address"));
-                    });
-                    if (tableItem[i].children[0].children.length == 1) {
-                        $(tableItem[i].children[0]).append($("<a href='"+ webAddress +"' target='_blank'>View</a>"));
-                    }
+            for (var i = tableItem.length - 1; i >= 0; i--) {
+                var dataContent = tableItem[i].children[0].children[0].getAttribute("data-content");
+                var ipAddress = dataContent.split("\"")[3];
+                var address = "";
+                if (appName.endWith("-web")) {
+                    address = "http://" + ipAddress + ":8080/";
+                } else if (appName.endWith("-service")) {
+                    address = "http://" + ipAddress + ":4080/services";
                 }
-            } else if (appName.endWith("-service")) {
-                for (var i = tableItem.length - 1; i >= 0; i--) {
-                    var dataContent = tableItem[i].children[0].children[0].getAttribute("data-content");
-                    console.log(dataContent);
-                    var serviceIp = dataContent.split("\"")[3];
-                    var serviceAddress = "http://" + serviceIp + ":4080/services";
-                    tableItem[i].children[0].setAttribute("address", serviceAddress);
-                    $(tableItem[i].children[0]).unbind();
-                    $(tableItem[i].children[0]).click(function(){
-                        //window.open($(this).attr("address"));
-                        console.log($(this).attr("address"));
-                    });
-                    if (tableItem[i].children[0].children.length == 1) {
-                        $(tableItem[i].children[0]).append($("<a href='"+ serviceAddress +"' target='_blank'>View</a>"));
-                    }
+                tableItem[i].children[0].setAttribute("address", address);
+                if (tableItem[i].children[0].children.length == 1) {
+                    $(tableItem[i].children[0]).append($("<a href='"+ address +"' target='_blank'>View</a>"));
                 }
             }
         }

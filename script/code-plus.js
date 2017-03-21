@@ -73,6 +73,7 @@ $(function(){
     getBetaBranchName();
 
     var urlArray = url.split("/");
+    //发布页面
     if (urlArray.length == 7 && urlArray[5] == "tickets") {
         updatePublishPage();
     }

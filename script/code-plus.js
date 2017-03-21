@@ -110,6 +110,8 @@ function updatePublishPage() {
 
 function updateBetaPage() {
     console.log(betaBranchUrl);
+    //获取页面完整地址
+    url = window.location.href;
     console.log(url);
     if (url != betaBranchUrl) {
         console.log("当前页面不是beta分支页面..");

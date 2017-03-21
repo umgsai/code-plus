@@ -101,6 +101,7 @@ function updatePublishPage() {
                     address = "http://" + ipAddress + ":4080/services";
                 }
                 tableItem[i].children[0].setAttribute("address", address);
+                //保证只添加一次链接
                 if (tableItem[i].children[0].children.length == 1) {
                     $(tableItem[i].children[0]).append($("<a href='"+ address +"' target='_blank'>View</a>"));
                 }

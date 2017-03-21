@@ -11,9 +11,9 @@ var groupName = "";
 var appName = "";
 var url = "";
 
-String.prototype.endWith=function(endStr){
-    var d=this.length-endStr.length;
-    return (d>=0&&this.lastIndexOf(endStr)==d)
+String.prototype.endWith = function(endStr) {
+    var d = this.length - endStr.length;
+    return (d >= 0 && this.lastIndexOf(endStr) == d);
 }
 
 $(function(){

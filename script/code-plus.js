@@ -104,9 +104,11 @@ function updatePublishPage() {
                 //保证只添加一次链接
                 if (tableItem[i].children[0].children.length == 1) {
                     $(tableItem[i].children[0]).append($("<a href='"+ address +"' target='_blank'>View</a>"));
+                    $(tableItem[i].children[0]).append($("<br/><span>" + ipAddress + "</span>"));
                 }
             }
         }
+
     });
 }
 
@@ -257,4 +259,17 @@ function initAppInfo() {
         return false;
     }
     return true;
+}
+
+function copy1() {
+    var cpTxt = "复制的数据";
+    var clipboardData = window.clipboardData; //for IE
+    if (!clipboardData) { // for chrome
+        clipboardData = e.originalEvent.clipboardData;
+    }
+    //e.clipboardData.getData('text');//可以获取用户选中复制的数据
+    clipboardData.setData('Text', cpTxt);
+    //alert(cpTxt);
+    //$('#message').text('Copy Data : ' + cpTxt);
+    return false;//否则设不生效
 }

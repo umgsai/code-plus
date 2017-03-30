@@ -95,7 +95,7 @@ function updatePublishPage() {
                 var dataContent = tableItem[i].children[0].children[0].getAttribute("data-content");
                 var ipAddress = dataContent.split("\"")[3]; //机器的IP地址
                 var address = "";
-                if (appName.endWith("-web")) {
+                if (appName.endWith("-web") || appName.endWith("-mq")) {
                     address = "http://" + ipAddress + ":8080/";
                 } else if (appName.endWith("-service")) {
                     address = "http://" + ipAddress + ":4080/services";

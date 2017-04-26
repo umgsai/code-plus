@@ -94,6 +94,7 @@ function updatePublishPage() {
             for (var i = $(".grouping-rollouts-list").find("tbody").find("tr").length - 1; i >= 0; i--) {
                 //var dataContent = tableItem[i].children[0].children[0].getAttribute("data-content");
                 var dataContent = $($(".grouping-rollouts-list").find("tbody").find("tr")[i]).find(".group-hostname").attr("data-content");
+                //解析得到二维数组
                 var serverArray = eval('[' + dataContent + ']');
                 if (!serverArray) {
                     continue;
@@ -144,7 +145,7 @@ function updateBetaPage() {
            continue;
         }
         ip = ip.replace(/[\r\n]/g,"");//去掉特殊字符
-        console.log("IP:" + ip);
+        //console.log("IP:" + ip);
         if ($($(".module-machine-list").find("tbody").find("tr")[i]).find(".ip-addr").parent().children().length >= 3) {
             //已经添加过
             continue;

@@ -86,20 +86,19 @@ function updatePublishPage() {
     ticketPackingItem.bind('DOMNodeInserted', function(e){
         //console.log("ticketPackingItem刷新");
         if (ticketPackingItem[0].children.length > 2) {
-            var legendItem = ticketPackingItem[0].children[1];
-            var legendItemText = legendItem.innerHTML;//分组操作(bb-merchant-finance-app-web | HealthCheckUrl:/index.jsp)
+            //var legendItem = ticketPackingItem[0].children[1];
+            var legendItemText = ticketPackingItem.find("legend").text();//分组操作(bb-merchant-finance-app-web | HealthCheckUrl:/index.jsp)
             var appName = legendItemText.split("(")[1].split("|")[0].replace(" ", "");
             //console.log(appName); //应用名
-            //var tableItem = $(".grouping-rollouts-list")[0].children[2].children;
             for (var i = $(".grouping-rollouts-list").find("tbody").find("tr").length - 1; i >= 0; i--) {
-                //var dataContent = tableItem[i].children[0].children[0].getAttribute("data-content");
+                if ($($(".grouping-rollouts-list").find("tbody").find("tr")[i]).find(".group-hostname").parent().children().length > 1) {
+                    //已经添加了
+                    break;
+                }
                 var dataContent = $($(".grouping-rollouts-list").find("tbody").find("tr")[i]).find(".group-hostname").attr("data-content");
                 //解析得到二维数组
                 var serverArray = eval('[' + dataContent + ']');
                 if (!serverArray) {
-                    continue;
-                }
-                if ($($(".grouping-rollouts-list").find("tbody").find("tr")[i]).find(".group-hostname").parent().children().length > 1) {
                     continue;
                 }
                 //一个分组可能有多台机器

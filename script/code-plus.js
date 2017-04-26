@@ -126,16 +126,18 @@ function updateBetaPage() {
     var tbody = $(".module-machine-list")[0].children[1].children;
     //var modules = tbody.children;
     //console.log("模块数量：" + tbody);
-    for (var i = 0; i < tbody.length; i++) {
+    for (var i = 0; i < $(".module-machine-list").find("tbody").find("tr").length; i++) {
         var tr = tbody[i]
         var module = tr.children[0].children[1].children[0];
-        var moduleName = module.innerHTML;
+        //var moduleName = module.innerHTML;
+        var moduleName = $($(".module-machine-list").find("tbody").find("tr")[i]).find("td").find("a").find("span").html();
         moduleName = moduleName.replace(/[\r\n]/g,"");//去掉特殊字符
         //console.log(module);
         if (String(moduleName).endWith("-service")) {
             console.log("service："  + moduleName);
             //console.log(tr.children[3].children[1]);
-            var serviceIp = tr.children[3].children[1].innerHTML;
+            //var serviceIp = tr.children[3].children[1].innerHTML;
+            var serviceIp = $($(".module-machine-list").find("tbody").find("tr")[i]).find(".ip-addr").html();
             if (tr.children[3].children.length >= 3) {
                 //已经添加过
                 continue;
@@ -149,7 +151,9 @@ function updateBetaPage() {
                 var serviceIps = serviceIp.split(",");
                 for (var j = 0; j < serviceIps.length; j++) {
                     var serviceAddress = "http://" + serviceIps[j] + ":4080/services";
-                    $($(".module-machine-list")[0].children[1].children[i].children[3]).append($("<a href='" + serviceAddress + "' target='_blank'>Go" + (j + 1) + "</a>"));
+                    $($(".module-machine-list").find("tbody").find("tr")[3]).find(".ip-addr").parent().append($("<a href='" + serviceAddress + "' target='_blank'>Go" + (j + 1) + "</a>"))
+                    //$($(".module-machine-list").find("tbody").find("tr")[i]).find(".ip-addr").after($("<a href='" + serviceAddress + "' target='_blank'>Go" + (j + 1) + "</a>"))
+                    //$($(".module-machine-list")[0].children[1].children[i].children[3]).append($("<a href='" + serviceAddress + "' target='_blank'>Go" + (j + 1) + "</a>"));
                 }
             } else {
                 var serviceAddress = "http://" + serviceIp + ":4080/services";

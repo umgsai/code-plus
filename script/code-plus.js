@@ -90,21 +90,27 @@ function updatePublishPage() {
             var legendItemText = legendItem.innerHTML;//分组操作(bb-merchant-finance-app-web | HealthCheckUrl:/index.jsp)
             var appName = legendItemText.split("(")[1].split("|")[0].replace(" ", "");
             //console.log(appName); //应用名
-            var tableItem = $(".grouping-rollouts-list")[0].children[2].children;
-            for (var i = tableItem.length - 1; i >= 0; i--) {
-                var dataContent = tableItem[i].children[0].children[0].getAttribute("data-content");
-                var ipAddress = dataContent.split("\"")[3]; //机器的IP地址
-                var address = "";
-                if (appName.endWith("-web") || appName.endWith("-mq")) {
-                    address = "http://" + ipAddress + ":8080/";
-                } else if (appName.endWith("-service")) {
-                    address = "http://" + ipAddress + ":4080/services";
+            //var tableItem = $(".grouping-rollouts-list")[0].children[2].children;
+            for (var i = $(".grouping-rollouts-list").find("tbody").find("tr").length - 1; i >= 0; i--) {
+                //var dataContent = tableItem[i].children[0].children[0].getAttribute("data-content");
+                var dataContent = $($(".grouping-rollouts-list").find("tbody").find("tr")[i]).find(".group-hostname").attr("data-content");
+                var serverArray = eval('[' + dataContent + ']');
+                if (!serverArray) {
+                    continue;
                 }
-                tableItem[i].children[0].setAttribute("address", address);
-                //保证只添加一次链接
-                if (tableItem[i].children[0].children.length == 1) {
-                    $(tableItem[i].children[0]).append($("<a href='"+ address +"' target='_blank'>View</a>"));
-                    $(tableItem[i].children[0]).append($("<br/><span>" + ipAddress + "</span>"));
+                if ($($(".grouping-rollouts-list").find("tbody").find("tr")[i]).find(".group-hostname").parent().children().length > 1) {
+                    continue;
+                }
+                //一个分组可能有多台机器
+                for (var j = 0; j < serverArray.length; j++) {
+                    var  ipAddress = serverArray[j][1];
+                    if (appName.endWith("-web") || appName.endWith("-mq")) {
+                        address = "http://" + ipAddress + ":8080/index.jsp";
+                    } else if (appName.endWith("-service")) {
+                        address = "http://" + ipAddress + ":4080/services";
+                    }
+                    $($($(".grouping-rollouts-list").find("tbody").find("tr")[i]).find(".group-hostname").parent()).append($("<br/><a href='"+ address +"' target='_blank'>View" + (j + 1) + "</a>"))
+                    $($($(".grouping-rollouts-list").find("tbody").find("tr")[i]).find(".group-hostname").parent()).append($("<br/><span>" + ipAddress + "</span>"))
                 }
             }
         }
@@ -122,68 +128,52 @@ function updateBetaPage() {
         return;
     }
     console.log("已切换到beta分支..");
-    console.log($(".module-machine-list")[0].children[1].children.length);
-    var tbody = $(".module-machine-list")[0].children[1].children;
+    //console.log($(".module-machine-list")[0].children[1].children.length);
+    //var tbody = $(".module-machine-list")[0].children[1].children;
     //var modules = tbody.children;
     //console.log("模块数量：" + tbody);
     for (var i = 0; i < $(".module-machine-list").find("tbody").find("tr").length; i++) {
-        var tr = tbody[i]
-        var module = tr.children[0].children[1].children[0];
+        //var tr = tbody[i]
+        //var module = tr.children[0].children[1].children[0];
         //var moduleName = module.innerHTML;
         var moduleName = $($(".module-machine-list").find("tbody").find("tr")[i]).find("td").find("a").find("span").html();
         moduleName = moduleName.replace(/[\r\n]/g,"");//去掉特殊字符
         //console.log(module);
-        if (String(moduleName).endWith("-service")) {
-            console.log("service："  + moduleName);
-            //console.log(tr.children[3].children[1]);
-            //var serviceIp = tr.children[3].children[1].innerHTML;
-            var serviceIp = $($(".module-machine-list").find("tbody").find("tr")[i]).find(".ip-addr").html();
-            if (tr.children[3].children.length >= 3) {
-                //已经添加过
-                continue;
-            }
-            serviceIp = serviceIp.replace(/[\r\n]/g,"");//去掉特殊字符
-            if (serviceIp.length <= 0) {
-                //有可能还没有申请主机
-                continue;
-            }
-            if (serviceIp.indexOf(",") > 0) {
-                var serviceIps = serviceIp.split(",");
-                for (var j = 0; j < serviceIps.length; j++) {
-                    var serviceAddress = "http://" + serviceIps[j] + ":4080/services";
-                    $($(".module-machine-list").find("tbody").find("tr")[i]).find(".ip-addr").parent().append($("<a href='" + serviceAddress + "' target='_blank'>Go" + (j + 1) + "</a>"))
-                    //$($(".module-machine-list").find("tbody").find("tr")[i]).find(".ip-addr").after($("<a href='" + serviceAddress + "' target='_blank'>Go" + (j + 1) + "</a>"))
-                    //$($(".module-machine-list")[0].children[1].children[i].children[3]).append($("<a href='" + serviceAddress + "' target='_blank'>Go" + (j + 1) + "</a>"));
+        var ip = $($(".module-machine-list").find("tbody").find("tr")[i]).find(".ip-addr").html();
+        if (!ip) {
+           continue;
+        }
+        ip = ip.replace(/[\r\n]/g,"");//去掉特殊字符
+        console.log("IP:" + ip);
+        if ($($(".module-machine-list").find("tbody").find("tr")[i]).find(".ip-addr").parent().children().length >= 3) {
+            //已经添加过
+            continue;
+        }
+        if (ip.length <= 0) {
+            //还没有申请主机
+            continue;
+        }
+        //多余1台主机
+        if (ip.indexOf(",") > 0) {
+            var ips = ip.split(",");
+            var address = "";
+            for (var j = 0; j < ips.length; j++) {
+                if (String(moduleName).endWith("-service")) {
+                    address = "http://" + ips[j] + ":4080/services";
+                } else if (String(moduleName).endWith("-web") || String(moduleName).endWith("-mq")) {
+                    address = "http://" + ips[j] + ":8080/index.jsp";
                 }
-            } else {
-                var serviceAddress = "http://" + serviceIp + ":4080/services";
-                //$($(".module-machine-list")[0].children[1].children[i].children[3]).append($("<a href='" + serviceAddress + "' target='_blank'>Go</a>"));
-                $($(".module-machine-list").find("tbody").find("tr")[i]).find(".ip-addr").parent().append($("<a href='" + serviceAddress + "' target='_blank'>Go</a>"))
-
+                $($(".module-machine-list").find("tbody").find("tr")[i]).find(".ip-addr").parent().append($("<a href='" + address + "' target='_blank'>Go" + (j + 1) + "</a>"))
             }
-        } else if (String(moduleName).endWith("-web") || String(moduleName).endWith("-mq")) {
-            if (tr.children[3].children.length >= 3) {
-                //已经添加过了
-                continue;
+        } else {
+            //只有一台主机
+            var address = "";
+            if (String(moduleName).endWith("-service")) {
+                address = "http://" + ip + ":4080/services";
+            } else if (String(moduleName).endWith("-web") || String(moduleName).endWith("-mq")) {
+                address = "http://" + ip + ":8080/index.jsp";
             }
-            //var webIp = tr.children[3].children[1].innerHTML;
-            var webIp = $($(".module-machine-list").find("tbody").find("tr")[i]).find(".ip-addr").html();
-            webIp = webIp.replace(/[\r\n]/g,"");//去掉特殊字符
-            if (webIp.length <= 0) {
-                //有可能还没有申请主机
-                continue;
-            }
-            if (webIp.indexOf(",") > 0) {
-                //不止一台机器
-                var webIps = webIp.split(",");
-                for (var j = 0; j < webIps.length; j++) {
-                    var webAddress = "http://" + webIps[j] + ":8080/index.jsp";
-                    $($(".module-machine-list").find("tbody").find("tr")[i]).find(".ip-addr").parent().append($("<a href='" + webAddress + "' target='_blank'>Go" + (j + 1) + "</a>"))
-                }
-            } else {
-                var webAddress = "http://" + webIp + ":8080/index.jsp";
-                $($(".module-machine-list").find("tbody").find("tr")[i]).find(".ip-addr").parent().append($("<a href='" + webAddress + "' target='_blank'>Go</a>"))
-            }
+            $($(".module-machine-list").find("tbody").find("tr")[i]).find(".ip-addr").parent().append($("<a href='" + address + "' target='_blank'>Go</a>"))
         }
     }
 }
@@ -205,7 +195,6 @@ function updatePage() {
     betaBranchUrl = "http://" + host + "/" + groupName + "/" + appName + "/ci_branch/" + betaBranchName;
     var betaLink = $("<a>Beta</a>");
     betaLink.attr("href", betaBranchUrl);
-    //$($(".ci")[0]).append($("<a href='" + betaBranchUrl + "'><h1 class=\"project_name\">Beta</h1></a>"));
     $(".ci").append($("<a href='" + betaBranchUrl + "'><h1 class=\"project_name\">Beta</h1></a>"));
 }
 
@@ -224,13 +213,9 @@ function getBetaBranchName() {
             //console.log(doc);
             $.each(doc, function(i, el) {
                 if (i == 23) {
-                    console.log($(el).find(".project-refs-select").find("option").length);
-                    //var branchNum = $(el).children()[0].children[0].children[0].children[0].children[1].children[0].children.length;
                     var branchNum = $(el).find(".project-refs-select").find("option").length;
                     for (var i = branchNum - 1; i >= 0; i--) {
-                        //var branch = $(el).children()[0].children[0].children[0].children[0].children[1].children[0].children[i];
                         var branch = $(el).find(".project-refs-select").find("option")[i];
-                        //console.log(branch + "--" + branch.text);
                         //获取beta分支名字
                         if (branch.text.indexOf("[beta]") > 0) {
                             //当前页面即为beta分支页面

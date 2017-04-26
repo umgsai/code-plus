@@ -198,7 +198,8 @@ function updatePage() {
     betaBranchUrl = "http://" + host + "/" + groupName + "/" + appName + "/ci_branch/" + betaBranchName;
     var betaLink = $("<a>Beta</a>");
     betaLink.attr("href", betaBranchUrl);
-    $($(".ci")[0]).append($("<a href='" + betaBranchUrl + "'><h1 class=\"project_name\">Beta</h1></a>"));
+    //$($(".ci")[0]).append($("<a href='" + betaBranchUrl + "'><h1 class=\"project_name\">Beta</h1></a>"));
+    $(".ci").append($("<a href='" + betaBranchUrl + "'><h1 class=\"project_name\">Beta</h1></a>"));
 }
 
 function getBetaBranchName() {
@@ -216,9 +217,12 @@ function getBetaBranchName() {
             //console.log(doc);
             $.each(doc, function(i, el) {
                 if (i == 23) {
-                    var branchNum = $(el).children()[0].children[0].children[0].children[0].children[1].children[0].children.length;
+                    console.log($(el).find(".project-refs-select").find("option").length);
+                    //var branchNum = $(el).children()[0].children[0].children[0].children[0].children[1].children[0].children.length;
+                    var branchNum = $(el).find(".project-refs-select").find("option").length;
                     for (var i = branchNum - 1; i >= 0; i--) {
-                        var branch = $(el).children()[0].children[0].children[0].children[0].children[1].children[0].children[i];
+                        //var branch = $(el).children()[0].children[0].children[0].children[0].children[1].children[0].children[i];
+                        var branch = $(el).find(".project-refs-select").find("option")[i];
                         //console.log(branch + "--" + branch.text);
                         //获取beta分支名字
                         if (branch.text.indexOf("[beta]") > 0) {

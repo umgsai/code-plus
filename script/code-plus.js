@@ -151,20 +151,23 @@ function updateBetaPage() {
                 var serviceIps = serviceIp.split(",");
                 for (var j = 0; j < serviceIps.length; j++) {
                     var serviceAddress = "http://" + serviceIps[j] + ":4080/services";
-                    $($(".module-machine-list").find("tbody").find("tr")[3]).find(".ip-addr").parent().append($("<a href='" + serviceAddress + "' target='_blank'>Go" + (j + 1) + "</a>"))
+                    $($(".module-machine-list").find("tbody").find("tr")[i]).find(".ip-addr").parent().append($("<a href='" + serviceAddress + "' target='_blank'>Go" + (j + 1) + "</a>"))
                     //$($(".module-machine-list").find("tbody").find("tr")[i]).find(".ip-addr").after($("<a href='" + serviceAddress + "' target='_blank'>Go" + (j + 1) + "</a>"))
                     //$($(".module-machine-list")[0].children[1].children[i].children[3]).append($("<a href='" + serviceAddress + "' target='_blank'>Go" + (j + 1) + "</a>"));
                 }
             } else {
                 var serviceAddress = "http://" + serviceIp + ":4080/services";
-                $($(".module-machine-list")[0].children[1].children[i].children[3]).append($("<a href='" + serviceAddress + "' target='_blank'>Go</a>"));
+                //$($(".module-machine-list")[0].children[1].children[i].children[3]).append($("<a href='" + serviceAddress + "' target='_blank'>Go</a>"));
+                $($(".module-machine-list").find("tbody").find("tr")[i]).find(".ip-addr").parent().append($("<a href='" + serviceAddress + "' target='_blank'>Go</a>"))
+
             }
         } else if (String(moduleName).endWith("-web") || String(moduleName).endWith("-mq")) {
             if (tr.children[3].children.length >= 3) {
                 //已经添加过了
                 continue;
             }
-            var webIp = tr.children[3].children[1].innerHTML;
+            //var webIp = tr.children[3].children[1].innerHTML;
+            var webIp = $($(".module-machine-list").find("tbody").find("tr")[i]).find(".ip-addr").html();
             webIp = webIp.replace(/[\r\n]/g,"");//去掉特殊字符
             if (webIp.length <= 0) {
                 //有可能还没有申请主机
@@ -174,12 +177,12 @@ function updateBetaPage() {
                 //不止一台机器
                 var webIps = webIp.split(",");
                 for (var j = 0; j < webIps.length; j++) {
-                    var webAddress = "http://" + webIps[j] + ":8080/";
-                    $($(".module-machine-list")[0].children[1].children[i].children[3]).append($("<a href='" + webAddress + "' target='_blank'>Go" + (j + 1) + "</a>"));
+                    var webAddress = "http://" + webIps[j] + ":8080/index.jsp";
+                    $($(".module-machine-list").find("tbody").find("tr")[i]).find(".ip-addr").parent().append($("<a href='" + webAddress + "' target='_blank'>Go" + (j + 1) + "</a>"))
                 }
             } else {
-                var webAddress = "http://" + webIp + ":8080/";
-                $($(".module-machine-list")[0].children[1].children[i].children[3]).append($("<a href='" + webAddress + "' target='_blank'>Go</a>"));
+                var webAddress = "http://" + webIp + ":8080/index.jsp";
+                $($(".module-machine-list").find("tbody").find("tr")[i]).find(".ip-addr").parent().append($("<a href='" + webAddress + "' target='_blank'>Go</a>"))
             }
         }
     }

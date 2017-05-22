@@ -149,8 +149,12 @@ function updateBetaPage() {
             //已经添加过
             continue;
         }
-        if (ip.length <= 0) {
-            //还没有申请主机
+        if (/\d/gi.test(ip)) {
+            //包含数字
+            console.log("IP包含数字");
+        } else {
+            //不包含数字，还没有申请主机
+            console.log("IP不包含数字,还没有申请主机");
             continue;
         }
         //多余1台主机

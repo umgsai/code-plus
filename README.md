@@ -4,4 +4,4 @@
 ## 2017年7月6日20:55:56
 由于美团点评Code平台迁移，本插件已不再适合于新的Code平台，故停止更新。待有时间再重新针对新的平台写一个插件。
 
-Created By shangyidong@meituan.com
+Created By shangyidong@bixin.cn
